@@ -3,23 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-enum type {
-  ADD,
-  SUBTRACT,
-  HALT
-};
-
-struct body {
-  enum type type; 
-  int reg;
-  int label1;
-  int label2;
-};
-
-struct pair {
-  int first;
-  int second;
-};
+#include "main.h"
 
 static int *       decode_int_to_array (int input);
 static struct pair decode_int_to_pair1 (int input);
