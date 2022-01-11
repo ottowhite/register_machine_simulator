@@ -21,8 +21,23 @@ struct pair {
   int second;
 };
 
-static void print_bits(size_t const size, void const * const ptr)
-{
+static int *       decode_int_to_array (int input);
+static struct pair decode_int_to_pair1 (int input);
+static struct pair decode_int_to_pair2 (int input);
+
+static int encode_pair_to_int1 (struct pair pair);
+static int encode_pair_to_int2 (struct pair pair);
+static int encode_body_to_int  (struct body body);
+static int encode_array_to_int (int *arr);
+
+static void execute_program (int *configuration, struct body *program);
+
+static void print_bits          (size_t const size, void const * const ptr);
+static void print_body          (struct body body);
+static int  print_configuration (int *configuration);
+
+
+static void print_bits(size_t const size, void const * const ptr) {
     unsigned char *b = (unsigned char*) ptr;
     unsigned char byte;
     int i, j;
@@ -59,8 +74,7 @@ static int *decode_int_to_array (int input) {
 static struct pair decode_int_to_pair1 (int input) {
   int count = 0;
   while (input & 1) {
-    count++;
-    input >>= 1;
+    count++; input >>= 1;
   }
   input >>= 1;
   return (struct pair) {count, input};
@@ -133,7 +147,7 @@ static int encode_array_to_int (int *arr) {
   return list;
 }
 
-void print_body (struct body body) {
+static void print_body (struct body body) {
   switch (body.type) {
     case HALT:      printf ("HALT\n"); break;
     case ADD:       printf ("R%d+ -> L%d\n", body.reg, body.label1); break;
@@ -142,14 +156,14 @@ void print_body (struct body body) {
   }
 }
 
-int print_configuration (int *configuration) {
+static int print_configuration (int *configuration) {
   printf ("L:\t%d\n", configuration[0]);
   for (int i = 1; configuration[i] != -1; i++) {
     printf ("R%d:\t%d\n", i, configuration[i]);
   }
 }
 
-void execute_program (int *configuration, struct body *program) {
+static void execute_program (int *configuration, struct body *program) {
   print_configuration (configuration);
   int label        = configuration[0];
   struct body body = program[label];
@@ -185,17 +199,12 @@ int main (void) {
 
   assert(encode_array_to_int (decode_int_to_array (input)) == input);
 
-  printf ("Encoded program: %d\n", input);
-  printf ("Encoded program binary: ", input);
-  print_bits (sizeof (int), &input);
-  printf ("\n\nDecoded program: \n");
-
+  printf ("Decoded program: \n");
   res[0] = 46;
   for (int i = 0; res[i] != -1; i++) {
     printf ("L%d: ", i);
     print_body (decode_int_to_body(res[i]));
   }
-
   
   struct body program[20];
   program[0] = (struct body) { SUBTRACT,  1,  2,  1 };
@@ -220,11 +229,6 @@ int main (void) {
   encoded_program_arr[5] = encode_body_to_int (program[5]);
   encoded_program_arr[6] = -1;
 
-  printf ("\nProgram from encoded array\n");
-  for (int i = 0; encoded_program_arr[i] != -1; i++) {
-    printf ("L%d: %d\n", i, encoded_program_arr[i]);
-  }
-  
   printf ("\nProgram from encoded array, decoded\n");
   for (int i = 0; encoded_program_arr[i] != -1; i++) {
     printf ("L%d: ", i);
@@ -233,7 +237,7 @@ int main (void) {
 
   printf ("\n\n");
 
-  execute_program (configuration, program);
+  // execute_program (configuration, program);
 
   free (res);
   free (configuration);
