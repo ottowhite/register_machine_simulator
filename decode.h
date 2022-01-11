@@ -1,7 +1,7 @@
 #ifndef DECODE_H
 #define DECODE_H
 
-#include "main.h"
+#include "common.h"
 
 void        decode_int_to_array (int input, int *result);
 struct pair decode_int_to_pair1 (int input);

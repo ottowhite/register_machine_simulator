@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include "encode.h"
-#include "main.h"
+#include "common.h"
 
 int encode_pair_to_int1 (struct pair pair) {
   return (int) (pow (2, pair.first) * (2 * (pair.second) + 1)) - 1;

@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "pretty_print.h"
-#include "main.h"
+#include "common.h"
 
 void print_body (struct body body) {
   switch (body.type) {

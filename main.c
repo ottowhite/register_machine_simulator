@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "main.h"
+#include "common.h"
 #include "encode.h"
 #include "decode.h"
 #include "execute.h"

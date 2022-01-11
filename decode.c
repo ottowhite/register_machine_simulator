@@ -1,5 +1,5 @@
 #include "decode.h"
-#include "main.h"
+#include "common.h"
 
 void decode_int_to_array (int input, int *result) {
   int i = 0;
