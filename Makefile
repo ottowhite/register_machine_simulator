@@ -3,7 +3,8 @@ CFLAGS 	= -lm
 BUILD 	= main
 
 all: $(BUILD)
+
 main: main.c 
 
 clean:
-	rm -rf build
+	rm -rf $(BUILD)
