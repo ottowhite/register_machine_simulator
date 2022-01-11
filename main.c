@@ -20,7 +20,6 @@ static void print_bits          (size_t const size, void const * const ptr);
 static void print_body          (struct body body);
 static int  print_configuration (int *configuration);
 
-
 static void print_bits(size_t const size, void const * const ptr) {
     unsigned char *b = (unsigned char*) ptr;
     unsigned char byte;
@@ -198,11 +197,7 @@ int main (void) {
   program[4] = (struct body) { HALT                 };
   program[5] = (struct body) { ADD,       0,  0     };
 
-  int *configuration = calloc (10, sizeof (int));
-  configuration[0] = 0;
-  configuration[1] = 0;
-  configuration[2] = 7;
-  configuration[3] = -1;
+  int configuration[4] = {0, 0, 7, -1};
 
   int encoded_program_arr[20];
   encoded_program_arr[0] = encode_body_to_int (program[0]);  
@@ -224,6 +219,5 @@ int main (void) {
   // execute_program (configuration, program);
 
   free (res);
-  free (configuration);
   return 0;
 }
