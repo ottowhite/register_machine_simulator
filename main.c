@@ -11,15 +11,15 @@
 #include "pretty_print.h"
 
 static void demonstrate(void);
+static void demonstrate_translation(int input);
 static void print_usage(void);
 
 int main(int argc, char **argv) {
   if (argc > 1) {
-
-    if (!strcmp(argv[1], "-g")) {
+    if (!strcmp(argv[1], "-g") && argc == 3) {
       /* Godel number to RM translation case */
-      printf("Translate Godel number to RM. \n");
-    } else if (!strcmp(argv[1], "-d")) {
+      demonstrate_translation(atoi(argv[2]));
+    } else if (!strcmp(argv[1], "-d") && argc == 2) {
       /* Demonstration */
       demonstrate();
     } else {
@@ -34,16 +34,20 @@ int main(int argc, char **argv) {
   return 0;
 }
 
-static void demonstrate(void) {
-	int input = 20483;
+static void demonstrate_translation(int input) {
   int result[100];
+  printf("The Godel number %d can be uniquely translated to the register machine: \n\n", input);
   decode_int_to_array (input, result);
 
-  printf ("Decoded program: \n");
   for (int i = 0; result[i] != -1; i++) {
     printf ("L%d: ", i);
     print_body (decode_int_to_body(result[i]));
   }
+
+}
+
+static void demonstrate(void) {
+
   
   /* RM program execution. */
   int configuration[4] = {0, 0, 7, -1};
