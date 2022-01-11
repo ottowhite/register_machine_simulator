@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -9,16 +10,36 @@
 #include "execute.h"
 #include "pretty_print.h"
 
-int main (void) {
-  /* Godel number to RM program translation. */
+static void demonstrate(void);
+static void print_usage(void);
+
+int main(int argc, char **argv) {
+  if (argc > 1) {
+
+    if (!strcmp(argv[1], "-g")) {
+      /* Godel number to RM translation case */
+      printf("Translate Godel number to RM. \n");
+    } else if (!strcmp(argv[1], "-d")) {
+      /* Demonstration */
+      demonstrate();
+    } else {
+      /* Invalid argument */
+      print_usage();
+    }
+
+  } else {
+    /* Invalid number of arguments */
+    print_usage();
+  }
+  return 0;
+}
+
+static void demonstrate(void) {
 	int input = 20483;
   int result[100];
   decode_int_to_array (input, result);
 
-  assert(encode_array_to_int (result) == input);
-
   printf ("Decoded program: \n");
-  result[0] = 46;
   for (int i = 0; result[i] != -1; i++) {
     printf ("L%d: ", i);
     print_body (decode_int_to_body(result[i]));
@@ -50,8 +71,14 @@ int main (void) {
     print_body (decode_int_to_body(encoded_program_arr[i]));
   }
 
-  printf ("\n\n");
-
   execute_program (configuration, program);
-  return 0;
+}
+
+static void print_usage(void) {
+  printf(
+      "Usage: ./main OPTION [ARGS..]\n\n"
+      "   -g: Translate a given godel number into a register machine. \n"
+      "   -e: Execute the register machine represented by a given Godel number \n" 
+      "       with a given -1 terminated initial configuration. \n"
+      "   -d: Perform a demonstration. \n");
 }
