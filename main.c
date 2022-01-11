@@ -5,7 +5,7 @@
 
 #include "main.h"
 
-static int *       decode_int_to_array (int input);
+static void        decode_int_to_array (int input, int *result);
 static struct pair decode_int_to_pair1 (int input);
 static struct pair decode_int_to_pair2 (int input);
 
@@ -35,9 +35,7 @@ static void print_bits(size_t const size, void const * const ptr) {
 		printf (")");
 }
 
-static int *decode_int_to_array (int input) {
-  int *res = calloc (100, sizeof (int));
-
+static void decode_int_to_array (int input, int *result) {
   int i = 0;
   while (input != 0) {
     int count = 0;
@@ -46,12 +44,10 @@ static int *decode_int_to_array (int input) {
       input >>= 1;
     }
     input >>= 1;
-    res[i] = count;
+    result[i] = count;
     i++;
   }
-  res[i] = -1;
-  
-  return res;
+  result[i] = -1;
 }
 
 static struct pair decode_int_to_pair1 (int input) {
@@ -177,18 +173,23 @@ static void execute_program (int *configuration, struct body *program) {
 }
 
 int main (void) {
+  /* Godel number to RM program translation. */
 	int input = 20483;
-  int *res = decode_int_to_array (input);
+  int result[100];
+  decode_int_to_array (input, result);
 
-  assert(encode_array_to_int (decode_int_to_array (input)) == input);
+  assert(encode_array_to_int (result) == input);
 
   printf ("Decoded program: \n");
-  res[0] = 46;
-  for (int i = 0; res[i] != -1; i++) {
+  result[0] = 46;
+  for (int i = 0; result[i] != -1; i++) {
     printf ("L%d: ", i);
-    print_body (decode_int_to_body(res[i]));
+    print_body (decode_int_to_body(result[i]));
   }
   
+  /* RM program execution. */
+  int configuration[4] = {0, 0, 7, -1};
+
   struct body program[20];
   program[0] = (struct body) { SUBTRACT,  1,  2,  1 };
   program[1] = (struct body) { HALT                 };
@@ -196,8 +197,6 @@ int main (void) {
   program[3] = (struct body) { SUBTRACT,  1,  5,  4 };
   program[4] = (struct body) { HALT                 };
   program[5] = (struct body) { ADD,       0,  0     };
-
-  int configuration[4] = {0, 0, 7, -1};
 
   int encoded_program_arr[20];
   encoded_program_arr[0] = encode_body_to_int (program[0]);  
@@ -216,8 +215,6 @@ int main (void) {
 
   printf ("\n\n");
 
-  // execute_program (configuration, program);
-
-  free (res);
+  execute_program (configuration, program);
   return 0;
 }
